@@ -8,12 +8,13 @@ inThisBuild(
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
     scalafixScalaBinaryVersion := scalaBinaryVersion.value,
-    organization := "com.indoorvivants",
+    organization := "com.indoorvivants.detective",
+    sonatypeProfileName := "com.indoorvivants",
     organizationName := "Anton Sviridov",
     homepage := Some(
       url("https://github.com/indoorvivants/scala-library-template")
     ),
-    startYear := Some(2020),
+    startYear := Some(2022),
     licenses := List(
       "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
     ),
@@ -47,44 +48,53 @@ lazy val munitSettings = Seq(
   testFrameworks += new TestFramework("munit.Framework")
 )
 
-lazy val root = projectMatrix
-  .aggregate(core)
-
-lazy val core = projectMatrix
-  .in(file("modules/core"))
+lazy val root = project
+  .in(file("."))
+  .aggregate(platform.projectRefs*)
   .settings(
-    name := "core",
+    noPublishing
+  )
+
+lazy val platform = projectMatrix
+  .in(file("modules/platform"))
+  .settings(
+    name := "platform",
     Test / scalacOptions ~= filterConsoleScalacOptions
   )
   .settings(munitSettings)
   .jvmPlatform(scalaVersions)
-  .jsPlatform(scalaVersions, disableDependencyChecks)
+  /* .jsPlatform(scalaVersions, disableDependencyChecks) */
   .nativePlatform(scalaVersions, disableDependencyChecks)
   .enablePlugins(BuildInfoPlugin)
   .settings(
-    buildInfoPackage := "com.indoorvivants.library.internal",
+    buildInfoPackage := "com.indoorvivants.detective",
+    buildInfoOptions += BuildInfoOption.PackagePrivate,
     buildInfoKeys := Seq[BuildInfoKey](
       version,
       scalaVersion,
       scalaBinaryVersion
     ),
-    scalaJSUseMainModuleInitializer := true,
-    scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule))
+    /* scalaJSUseMainModuleInitializer := true, */
+    /* scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)) */
   )
 
-lazy val docs = project
-  .in(file("myproject-docs"))
+lazy val docs = projectMatrix
+  .in(file("docs"))
+  .jvmPlatform(Seq(Scala213))
+  .dependsOn(platform)
   .settings(
-    scalaVersion := Scala213,
     mdocVariables := Map(
       "VERSION" -> version.value
     ),
-    publish / skip := true,
-    publishLocal / skip := true
+    noPublishing
   )
   .settings(disableDependencyChecks)
-  .dependsOn(core.jvm(Scala213))
   .enablePlugins(MdocPlugin)
+
+val noPublishing = Seq(
+  publish / skip := true,
+  publishLocal / skip := true
+)
 
 val scalafixRules = Seq(
   "OrganizeImports",
