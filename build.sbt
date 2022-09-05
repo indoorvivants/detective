@@ -73,23 +73,24 @@ lazy val platform = projectMatrix
       version,
       scalaVersion,
       scalaBinaryVersion
-    ),
+    )
     /* scalaJSUseMainModuleInitializer := true, */
     /* scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)) */
   )
 
-lazy val docs = projectMatrix
-  .in(file("docs"))
-  .jvmPlatform(Seq(Scala213))
-  .dependsOn(platform)
-  .settings(
-    mdocVariables := Map(
-      "VERSION" -> version.value
-    ),
-    noPublishing
-  )
-  .settings(disableDependencyChecks)
-  .enablePlugins(MdocPlugin)
+/* lazy val docs = projectMatrix */
+/*   .in(file("docs")) */
+/*   .jvmPlatform(Seq(Scala213)) */
+/*   .dependsOn(platform) */
+/*   .settings( */
+/*     mdocVariables := Map( */
+/*       "VERSION" -> version.value */
+/*     ), */
+/*     mdocIn */
+/*     noPublishing */
+/*   ) */
+/*   .settings(disableDependencyChecks) */
+/*   .enablePlugins(MdocPlugin) */
 
 val noPublishing = Seq(
   publish / skip := true,
@@ -107,7 +108,7 @@ val CICommands = Seq(
   "clean",
   "compile",
   "test",
-  "docs/mdoc",
+  /* "docs/mdoc", */
   "scalafmtCheckAll",
   "scalafmtSbtCheck",
   s"scalafix --check $scalafixRules",
