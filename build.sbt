@@ -8,9 +8,9 @@ inThisBuild(
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
     scalafixScalaBinaryVersion := scalaBinaryVersion.value,
+    organizationName := "Anton Sviridov",
     organization := "com.indoorvivants.detective",
     sonatypeProfileName := "com.indoorvivants",
-    organizationName := "Anton Sviridov",
     homepage := Some(
       url("https://github.com/indoorvivants/scala-library-template")
     ),
@@ -28,6 +28,9 @@ inThisBuild(
     )
   )
 )
+
+organization := "com.indoorvivants.detective"
+sonatypeProfileName := "com.indoorvivants"
 
 // https://github.com/cb372/sbt-explicit-dependencies/issues/27
 lazy val disableDependencyChecks = Seq(
