@@ -4,10 +4,8 @@ Global / excludeLintKeys += scalaJSLinkerConfig
 
 inThisBuild(
   List(
-    scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0",
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalafixScalaBinaryVersion := scalaBinaryVersion.value,
     organizationName := "Anton Sviridov",
     organization := "com.indoorvivants.detective",
     sonatypeProfileName := "com.indoorvivants",
@@ -39,14 +37,14 @@ lazy val disableDependencyChecks = Seq(
   undeclaredCompileDependenciesTest := {}
 )
 
-val Scala213 = "2.13.8"
-val Scala212 = "2.12.16"
-val Scala3 = "3.1.3"
+val Scala213 = "2.13.14"
+val Scala212 = "2.12.19"
+val Scala3 = "3.3.3"
 val scalaVersions = Seq(Scala3, Scala212, Scala213)
 
 lazy val munitSettings = Seq(
   libraryDependencies += {
-    "org.scalameta" %%% "munit" % "1.0.0-M6" % Test
+    "org.scalameta" %%% "munit" % "1.0.0" % Test
   },
   testFrameworks += new TestFramework("munit.Framework")
 )
@@ -61,8 +59,7 @@ lazy val root = project
 lazy val platform = projectMatrix
   .in(file("modules/platform"))
   .settings(
-    name := "platform",
-    Test / scalacOptions ~= filterConsoleScalacOptions
+    name := "platform"
   )
   .settings(munitSettings)
   .jvmPlatform(scalaVersions)
